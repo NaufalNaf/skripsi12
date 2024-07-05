@@ -2,8 +2,8 @@ import joblib
 import pandas as pd
 from sklearn import preprocessing
 
-model = joblib.load('models/klasifikasi.sav')
-scaler = joblib.load('models/scaler.sav')
+model = joblib.load('klasifikasi.sav')
+scaler = joblib.load('scaler.sav')
 
 index_labels = {
     0: 'Extremely Weak',
