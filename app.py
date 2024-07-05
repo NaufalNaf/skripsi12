@@ -1,37 +1,26 @@
-import streamlit as st
 import joblib
-import numpy as np
+import pandas as pd
+from sklearn import preprocessing
 
-# Load the saved models
-scaler = joblib.load('scaler.sav')
-model = joblib.load('klasifikasi.sav')
+model = joblib.load('models/klasifikasi.sav')
+scaler = joblib.load('models/scaler.sav')
 
-# Define the application layout and functionality
-def main():
-    st.title('BMI Classification App')
+index_labels = {
+    0: 'Extremely Weak',
+    1: 'Weak',
+    2: 'Normal',
+    3: 'Overweight',
+    4: 'Obese',
+    5: 'Extremely Obese'
+}
 
-    # Get user input
-    gender = st.selectbox('Gender', ['Male', 'Female'])
-    height = st.number_input('Height (cm)', min_value=100, max_value=250)
-    weight = st.number_input('Weight (kg)', min_value=10, max_value=200)
+gender_mapping = {
+    0: 'Male',
+    1: 'Female'
+}
 
-    # Preprocess the user input
-    data = np.array([[gender, height, weight]])
-    data_scaled = scaler.transform(data)
-
-    # Make a prediction
-    prediction = model.predict(data_scaled)[0]
-
-    # Display the prediction
-    index_labels = {
-        0: 'Extremely Weak',
-        1: 'Weak',
-        2: 'Normal',
-        3: 'Overweight',
-        4: 'Obese',
-        5: 'Extremely Obese'
-    }
-    st.write('Predicted BMI Category:', index_labels[prediction])
-
-if __name__ == '__main__':
-    main()
+def predict(gender, height, weight):
+    data = [[gender, height, weight]]
+    scaled_data = scaler.transform(data)
+    prediction = model.predict(scaled_data)[0]
+    return index_labels[prediction]
